@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { EmployeeService } from 'src/app/services/Employee/employee.service';
 
 @Component({
@@ -9,10 +10,9 @@ import { EmployeeService } from 'src/app/services/Employee/employee.service';
 export class ListEmployeeComponent implements OnInit {
   
   Employees: any;
-  id: any;
 
-  constructor(private employeeService: EmployeeService) {
-    employeeService.getEmployeeList().subscribe((res) => this.Employees = res);
+  constructor(private employeeService: EmployeeService, private router: Router) {
+    employeeService.getEmployeeList().subscribe(res => this.Employees = res);
   }
 
   ngOnInit(): void {}
@@ -20,8 +20,10 @@ export class ListEmployeeComponent implements OnInit {
   onDelete(id: any){
     if(confirm("Are you sure") == true){
       this.employeeService.deleteEmployee(id).subscribe();
-      location.reload();
-      alert("Delete Successfully");
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['list-employees']);
+    });
+      alert("Deleted Successfully");
     }
 
   }
