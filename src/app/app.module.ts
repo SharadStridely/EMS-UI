@@ -13,6 +13,7 @@ import { ListDesignationsComponent } from './views/Designation/list-designations
 import { AddDepartmentComponent } from './views/Department/add-department/add-department.component';
 import { AddDesignationComponent } from './views/Designation/add-designation/add-designation.component';
 import { EditEmployeeComponent } from './views/Employee/edit-employee/edit-employee.component';
+import { NotFoundComponent } from './views/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { EditEmployeeComponent } from './views/Employee/edit-employee/edit-emplo
     ListDesignationsComponent,
     AddDepartmentComponent,
     AddDesignationComponent,
-    EditEmployeeComponent
+    EditEmployeeComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

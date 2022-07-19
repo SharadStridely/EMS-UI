@@ -137,6 +137,8 @@
         </div>
         <div class="mb-3">
           <button type="submit" class="btn btn-primary">Submit</button>
+          <span *ngIf="errorMessage != null" class="ms-3 text-danger fw-bold text-start">There might have some error</span>
+          <span *ngIf="isAdding && errorMessage == null" class="ms-3 text-start">Loading...</span>
         </div>
       </form>
     </div>

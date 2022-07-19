@@ -9,18 +9,18 @@ export class EmployeeService {
 
   constructor(private http: HttpClient) { }
 
-  employeeURL: string = environment.Employee;
+  employeeURL: string = environment.EmployeeURL;
 
   getEmployeeList(){
     return this.http.get(this.employeeURL);
   }
 
-  // getEmployeeById(id: any){
-  //   return this.http.get(this.employeeURL + "/" + id);
-  // }
+  getEmployeeById(id: any){
+    return this.http.get(this.employeeURL + "/" + id);
+  }
 
   addEmployee(Employee: any){
-    this.http.post(this.employeeURL, Employee).subscribe();
+    return this.http.post(this.employeeURL, Employee);
   }
 
   updateEmployee(Employee: any){

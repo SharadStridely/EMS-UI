@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DesignationService {
 
-  designationURL: string = environment.Designation;
+  designationURL: string = environment.DesignationURL;
 
   constructor(private http: HttpClient) { }
 

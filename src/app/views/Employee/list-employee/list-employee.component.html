@@ -30,6 +30,8 @@
           </tr>
         </thead>
         <tbody>
+          <tr *ngIf="errorMessage != null" class="fw-bold text-danger text-center">There is might some error occured</tr>
+          <tr *ngIf="!isFetching && errorMessage == null" class="text-start">Loading...</tr>
           <tr *ngFor="let emp of Employees">
             <td>{{ emp.firstName +" "+ emp.middleName +" "+ emp.lastName }}</td>
             
@@ -40,7 +42,7 @@
             <td class="text-center">{{ emp.designationName }}</td>
             <td class="text-end">{{ emp.salary | currency: "INR" }}</td>
             <td class="text-center">
-              <button type="button" class="btn btn-warning me-2">Edit</button>
+              <button type="button" class="btn btn-warning me-2" (click)="onEdit(emp.employeeId)">Edit</button>
               <button type="button" class="btn btn-danger" (click)="onDelete(emp.employeeId)">Delete</button></td>
           </tr>
         </tbody>

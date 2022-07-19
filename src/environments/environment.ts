@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  Employee: 'https://localhost:5001/api/employees',
-  Department: 'https://localhost:5001/api/departments',
-  Designation: 'https://localhost:5001/api/designations'
+  EmployeeURL: 'https://localhost:5001/api/employees',
+  DepartmentURL: 'https://localhost:5001/api/departments',
+  DesignationURL: 'https://localhost:5001/api/designations'
 };
 
 /*

@@ -9,7 +9,7 @@ export class DepartmentService {
 
   constructor(private http: HttpClient) { }
 
-  departmentURL: string = environment.Department;
+  departmentURL: string = environment.DepartmentURL;
 
   getAll(){
     return this.http.get(this.departmentURL);

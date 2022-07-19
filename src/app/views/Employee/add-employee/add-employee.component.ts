@@ -20,17 +20,15 @@ export class AddEmployeeComponent implements OnInit {
 
   Departments: any;
   Designations: any;
-
+  start = new Date();
+  Employee: any = new Employee(0, '', '', '', 0, this.start , 0, '', 0, '', 0, '');
+  isAdding: boolean = false;
+  errorMessage: any = null;
 
   constructor(private employeeService: EmployeeService, 
     private departmentService: DepartmentService, 
     private designationService: DesignationService,
     private router: Router) {}
-
-  start = new Date();
-
-  // Employee= new Employee();
-  Employee: any = new Employee(0, '', '', '', 0, this.start , 0, '', 0, '', 0, '')
 
   employee = new FormGroup({
     firstName: new FormControl(),
@@ -50,14 +48,19 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   onSubmit(employee: any) {
-    
+    this.isAdding = true;
     employee.value.hobbies = String(employee.value.hobbies);
     employee.value.deptId = Number(employee.value.deptId);  
     employee.value.desgnId = Number(employee.value.desgnId);  
     employee.value.gender = Number(employee.value.gender);  
-    this.employeeService.addEmployee(employee.value);
-    alert("Employee Added Successfully");
-    this.router.navigateByUrl("list-employees");
+    this.employeeService.addEmployee(employee.value).subscribe(() => {
+      this.isAdding = true;
+      alert("Employee Added Successfully");
+      this.router.navigateByUrl("list-employees");
+    }, (err) => {
+      this.isAdding = false;
+      this.errorMessage = err.message;
+    });
   }
 
   onChange(event: any){
