@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,67 +14,80 @@ import { EmployeeService } from 'src/app/services/Employee/employee.service';
 })
 export class EditEmployeeComponent implements OnInit {
 
-  Hobbies = [
-    { id: 1, name: 'Chess' },
-    { id: 2, name: 'Cricket' },
-    { id: 3, name: 'Reading' },
-  ];
-
+  //#region Globle Declare
   Departments: any;
   Designations: any;
   Employee: any;
   EmployeeId: any;
+  errorMessage: any = null;
+  isUpdating: boolean = false;
+  Hobbies = [
+    { id: 1, name: 'Chess', isChecked: false },
+    { id: 2, name: 'Cricket', isChecked: false },
+    { id: 3, name: 'Reading', isChecked: false },
+  ];
+  //#endregion
 
   constructor(private employeeService: EmployeeService, 
     private departmentService: DepartmentService, 
     private designationService: DesignationService,
     private editEmployeeService: EditEmployeeService,
-    private router: Router) { }
-
-  ngOnInit(): void {
+    private router: Router,
+    public datePipe: DatePipe) { }
+  
+    updateEmployee = new FormGroup({
+      employeeId: new FormControl(),
+      firstName: new FormControl(),
+      middleName: new FormControl(),
+      lastName: new FormControl(),
+      salary: new FormControl(),
+      dob: new FormControl(),
+      gender: new FormControl(),
+      deptId: new FormControl(),
+      desgnId: new FormControl(),
+      hobbies: new FormArray([])
+    });
+  
+    ngOnInit(): void {
     this.departmentService.getAll().subscribe(departments => this.Departments = departments);
     this.designationService.GetDesignationList().subscribe(designation => this.Designations = designation);
     this.EmployeeId = this.editEmployeeService.EmployeeId;
     this.employeeService.getEmployeeById(this.EmployeeId).subscribe(employee => {
       this.Employee = employee;
-      console.log(this.Employee);
-      this.setDefault();
+      this.setEmployeeValue();
     }); 
-    
   }
 
-  updateEmployee = new FormGroup({
-    employeeId: new FormControl(),
-    firstName: new FormControl(),
-    middleName: new FormControl(),
-    lastName: new FormControl(),
-    salary: new FormControl(),
-    dob: new FormControl(),
-    gender: new FormControl(),
-    deptId: new FormControl(),
-    desgnId: new FormControl(),
-    hobbies: new FormArray([])
-  });
+  setValueBeforeSubmit(){
+    this.updateEmployee.value.hobbies = this.updateEmployee.value.hobbies?.toString();
+    this.updateEmployee.value.gender = Number(this.updateEmployee.value.gender);
+    this.updateEmployee.value.deptId = Number(this.updateEmployee.value.deptId);
+    this.updateEmployee.value.desgnId = Number(this.updateEmployee.value.desgnId);
+  }
 
-  onSubmit(updateEmployee: FormGroup){
-    updateEmployee.value.hobbies = String(updateEmployee.value.hobbies);
-    updateEmployee.value.deptId = Number(updateEmployee.value.deptId);  
-    updateEmployee.value.desgnId = Number(updateEmployee.value.desgnId);  
-    updateEmployee.value.gender = Number(updateEmployee.value.gender);  
-    this.editEmployeeService.editEmployee(updateEmployee.value);
-    alert("Employee Updated Successfully");
-    this.router.navigateByUrl("list-employees");
+  onSubmit(){
+    this.setValueBeforeSubmit();
+    this.employeeService.updateEmployee(this.updateEmployee.value.employeeId, this.updateEmployee.value).subscribe(() => {
+      this.isUpdating = true;
+      alert("Employee Updated Successfully");
+      this.router.navigateByUrl("list-employees");
+    },
+    (err) => {
+      this.errorMessage = err.message;
+    });
   }
 
   onChange(event: any){
     const Hobbies: FormArray = this.updateEmployee.get('hobbies') as FormArray;
 
     if (event.target.checked) {
+      this.Hobbies[event.target].isChecked = true;
       Hobbies.push(new FormControl(event.target.value));
     } else {
       let i: number = 0;
       Hobbies.controls.forEach((item: any) => {
         if (item.value == event.target.value) {
+          this.Hobbies[event.target].isChecked = false;
           Hobbies.removeAt(i);
           return;
         }
@@ -83,20 +97,19 @@ export class EditEmployeeComponent implements OnInit {
 
   }
 
-  setDefault(){
-    let employee = {
+  setEmployeeValue(){
+    this.updateEmployee.setValue({
       employeeId: this.Employee.employeeId,
       firstName: this.Employee.firstName,
       middleName: this.Employee.middleName,
       lastName: this.Employee.lastName,
       salary: this.Employee.salary,
-      dob: this.Employee.dob,
-      gender: this.Employee.gender,
+      dob: this.datePipe.transform(this.Employee.dob, 'yyyy-MM-dd'),
+      gender: this.Employee.gender.toString(),
       deptId: this.Employee.deptId,
       desgnId: this.Employee.desgnId,
-      hobbies: this.Employee.hobbies
-    }
-    this.updateEmployee.setValue(employee);    
+      hobbies: this.Employee.hobbies,
+    });    
   }
 
 }

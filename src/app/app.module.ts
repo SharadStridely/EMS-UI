@@ -14,6 +14,7 @@ import { AddDepartmentComponent } from './views/Department/add-department/add-de
 import { AddDesignationComponent } from './views/Designation/add-designation/add-designation.component';
 import { EditEmployeeComponent } from './views/Employee/edit-employee/edit-employee.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { NotFoundComponent } from './views/not-found/not-found.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

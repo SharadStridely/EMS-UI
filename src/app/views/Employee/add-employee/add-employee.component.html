@@ -97,7 +97,7 @@
           <div *ngFor="let Hobbie of Hobbies; index as i">
             <input
               type="checkbox"
-              [value]="Hobbies[i].name"
+              [value]="Hobbie.name"
               (change)="onChange($event)"
             />
             {{ Hobbies[i].name }}

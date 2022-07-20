@@ -9,7 +9,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-12">
-        <form [formGroup]="updateEmployee" (ngSubmit)="onSubmit(updateEmployee)">
+        <form [formGroup]="updateEmployee" (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
             <input
@@ -93,13 +93,15 @@
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Hobbies</label>
-            <div *ngFor="let Hobbie of Hobbies; index as i">
+            <div *ngFor="let Hobbie of Hobbies; index as i" formArrayName="hobbies">
               <input
                 type="checkbox"
-                [value]="Hobbies[i].name"
+                name="{{ Hobbie.name }}"
+                id="{{ Hobbie.id }}"
+                value="{{ Hobbie.name }}"
                 (change)="onChange($event)"
               />
-              {{ Hobbies[i].name }}
+              {{ Hobbie.name }}
             </div>
           </div>
           <div class="mb-3">
@@ -136,6 +138,8 @@
           </div>
           <div class="mb-3">
             <button type="submit" class="btn btn-primary">Submit</button>
+            <span *ngIf="errorMessage != null" class="ms-3 text-danger fw-bold text-start">There might have some error</span>
+            <span *ngIf="isUpdating && errorMessage == null" class="ms-3 text-start">Loading...</span>
           </div>
         </form>
       </div>
