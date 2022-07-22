@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr'
 
 import { AppComponent } from './app.component';
 import { AddEmployeeComponent } from './views/Employee/add-employee/add-employee.component';
@@ -15,6 +16,8 @@ import { AddDesignationComponent } from './views/Designation/add-designation/add
 import { EditEmployeeComponent } from './views/Employee/edit-employee/edit-employee.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { DatePipe } from '@angular/common';
+import { NotificationsComponent } from './views/notifications/notifications.component';
+import { AddEditEmployeeComponent } from './views/Employee/add-edit-employee/add-edit-employee.component';
 
 @NgModule({
   declarations: [
@@ -27,14 +30,17 @@ import { DatePipe } from '@angular/common';
     AddDepartmentComponent,
     AddDesignationComponent,
     EditEmployeeComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    NotificationsComponent,
+    AddEditEmployeeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot()
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

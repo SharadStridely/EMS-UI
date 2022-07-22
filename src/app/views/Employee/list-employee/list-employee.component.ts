@@ -31,7 +31,7 @@ export class ListEmployeeComponent implements OnInit {
 
   onEdit(employeeId: any){
     this.editEmployeeService.editEmployee(employeeId);
-    this.router.navigateByUrl('edit-employee');
+    this.router.navigateByUrl('edits-employee');
   }
 
 

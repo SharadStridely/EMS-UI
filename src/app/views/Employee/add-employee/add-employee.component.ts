@@ -20,8 +20,7 @@ export class AddEmployeeComponent implements OnInit {
 
   Departments: any;
   Designations: any;
-  start = new Date();
-  Employee: any = new Employee(0, '', '', '', 0, this.start , 0, '', 0, '', 0, '');
+  Employee: any = new Employee();
   isAdding: boolean = false;
   errorMessage: any = null;
 
