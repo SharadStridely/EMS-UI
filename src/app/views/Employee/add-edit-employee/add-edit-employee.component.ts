@@ -125,6 +125,7 @@ export class AddEditEmployeeComponent implements OnInit {
     {
       this.Employee.hobbies = this.Employee.hobbies.slice(0, -1);
     }
+    this.displayToastrError();
   }
 
   onSubmit() {
@@ -139,10 +140,6 @@ export class AddEditEmployeeComponent implements OnInit {
         error:(err) => {
         this.isAdding = false;
         this.errorMessage = err.message;
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate(['employee/0']);
-        });
-        this.notifyService.showError(this.errorMessage, "myPortal");
         }
       });
     }
@@ -187,6 +184,24 @@ export class AddEditEmployeeComponent implements OnInit {
         'plain-invalid': (this.employeeForm.get(field).invalid && (this.employeeForm.get(field).dirty || this.employeeForm.get(field).touched))
       };
     } 
+  }
+
+  displayToastrError(){
+     if (this.employeeForm.value.firstName.trim() === '') {
+      this.notifyService.showError('Please fill the FirstName field', 'Validation Alert!');
+     }
+     else if (this.employeeForm.value.lastName.trim() === '') {
+      this.notifyService.showError('Please fill the LastName field', 'Validation Alert!');
+     }
+     else if (this.employeeForm.value.salary == null || this.employeeForm.value.salary == '0') {
+      this.notifyService.showError('Please fill the Salary field', 'Validation Alert!');
+     }
+     else if (this.employeeForm.value.deptId == 'Select') {
+      this.notifyService.showError('Please select the Department', 'Validation Alert!');
+     }
+     else if (this.employeeForm.value.desgnId == 'Select') {
+      this.notifyService.showError('Please select the Designation', 'Validation Alert!');
+     }
   }
 
 }

@@ -153,16 +153,10 @@
           <button
             type="submit"
             class="btn btn-primary"
-            [disabled]="employeeForm.invalid"
             (click)="onSubmit()"
           >
             Submit
           </button>
-          <span
-            *ngIf="errorMessage != null"
-            class="ms-3 text-danger fw-bold text-start"
-            >There might have some error</span
-          >
           <span *ngIf="isAdding && errorMessage == null" class="ms-3 text-start"
             >Loading...</span
           >
@@ -171,3 +165,5 @@
     </div>
   </div>
 </div>
+
+<!-- [disabled]="employeeForm.invalid" -->
