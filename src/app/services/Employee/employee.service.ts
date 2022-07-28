@@ -20,7 +20,18 @@ export class EmployeeService {
   }
 
   addEmployee(Employee: any){
-    return this.http.post(this.employeeURL, Employee);
+    return this.http.post(this.employeeURL, Employee)
+  // Post(repository, path, objModel, success, error, throwError?: any) {
+  //   var fullURL = ''
+  //   //this.getFullURL(repository, path);
+  //   this.http
+  //     .post(fullURL, JSON.stringify(objModel))
+  //     .subscribe(function (result) {
+  //       return success(result);
+  //     }, (err) => {
+  //       return err
+  //     });
+  // }
   }
 
   updateEmployee(id: number,Employee: any){

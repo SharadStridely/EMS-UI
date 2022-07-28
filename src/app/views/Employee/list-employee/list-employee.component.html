@@ -8,7 +8,7 @@
         <div class="col-1">
           <a
             class="text-decoration-none text-light"
-            routerLink="../edit-employee"
+            [routerLink]="['../employee',0]"
             ><button type="button" class="btn btn-success">Add</button></a
           >
         </div>
@@ -34,7 +34,6 @@
           <tr *ngIf="!isFetching && errorMessage == null" class="text-start">Loading...</tr>
           <tr *ngFor="let emp of Employees">
             <td>{{ emp.firstName +" "+ emp.middleName +" "+ emp.lastName }}</td>
-            
             <td>{{ emp.dob | date:'mediumDate' }}</td>
             <td class="text-center">{{ emp.gender == 0 ? 'Female' : 'Male'}}</td>
             <td>{{ emp.hobbies }}</td>
@@ -42,7 +41,7 @@
             <td class="text-center">{{ emp.designationName }}</td>
             <td class="text-end">{{ emp.salary | currency: "INR" }}</td>
             <td class="text-center">
-              <button type="button" class="btn btn-warning me-2" (click)="onEdit(emp.employeeId)">Edit</button>
+              <button type="button" class="btn btn-warning me-2" [routerLink]="['../employee', emp.employeeId]">Edit</button>
               <button type="button" class="btn btn-danger" (click)="onDelete(emp.employeeId)">Delete</button></td>
           </tr>
         </tbody>

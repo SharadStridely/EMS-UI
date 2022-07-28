@@ -12,7 +12,6 @@ export class EditEmployeeService {
 
   editEmployee(employeeId: any){
     this.EmployeeId = employeeId;
-    // this.employeeService.updateEmployee(employee);
   }
 
 }

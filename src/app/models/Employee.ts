@@ -1,15 +1,15 @@
 export class Employee {
-    EmployeeId: number;
-    FirstName: string;
-    MiddleName: string;
-    LastName: string;
-    Salary: number;
-    DOB: Date;
-    Gender: number;
-    Hobbies: string;
-    DeptId: number;
+    employeeId: number;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    salary: number;
+    dob: Date;
+    gender: number;
+    hobbies: string;
+    deptId: number;
     DepartmentName: string;
-    DesgnId: number;
-    DesignationName: string;
+    desgnId: number;
+    designationName: string;
   }
   

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EditEmployeeService } from 'src/app/services/Employee/edit-employee.service';
 import { EmployeeService } from 'src/app/services/Employee/employee.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-list-employee',
@@ -9,46 +10,51 @@ import { EmployeeService } from 'src/app/services/Employee/employee.service';
   styleUrls: ['./list-employee.component.css'],
 })
 export class ListEmployeeComponent implements OnInit {
-  
+  //#region globle declare
   Employees: any;
-  isFetching: boolean = false;
-  isDeleting: boolean = false;
+  isFetching: boolean;
+  isDeleting: boolean;
   errorMessage: any = null;
+  //#endregion
 
-  constructor(private employeeService: EmployeeService, private router: Router,private editEmployeeService: EditEmployeeService) {
-    employeeService.getEmployeeList().subscribe(res => {
-      this.isFetching = true;
-      this.Employees = res;
-    }, (err) => {
-      this.errorMessage = err.message;
-      this.isFetching = false;
-    })
-    
-  }
+  constructor(
+    private employeeService: EmployeeService,
+    private router: Router,
+    private editEmployeeService: EditEmployeeService,
+    private notifyService : NotificationService
+  ) { }
 
-  ngOnInit(): void {}
-
-
-  onEdit(employeeId: any){
-    this.editEmployeeService.editEmployee(employeeId);
-    this.router.navigateByUrl('edits-employee');
-  }
-
-
-  onDelete(id: any){
-    if(confirm("Are you sure") == true){
-      this.employeeService.deleteEmployee(id).subscribe(() => {
-        this.isDeleting = true
-      },(err) => {
+  ngOnInit(): void {
+    this.employeeService.getEmployeeList().subscribe({
+      next:(res) => {
+        this.isFetching = true;
+        this.Employees = res;
+      },
+      error:(err) => {
         this.errorMessage = err.message;
-        this.isDeleting = false;
-      });
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['list-employees']);
+        this.isFetching = false;
+        this.notifyService.showError(this.errorMessage, "myPortal");
+      }
     });
-      alert("Deleted Successfully");
-    }
-
   }
 
+  onDelete(id: any) {
+    if (confirm('Are you sure') == true) {
+      this.employeeService.deleteEmployee(id).subscribe({
+        complete:() => {
+          this.isDeleting = true;
+          this.notifyService.showSuccess("Employee Deleted Successfully", "myPortal");
+        },
+        error:(err) => {
+          this.errorMessage = err.message;
+          this.isDeleting = false;
+          this.notifyService.showError(this.errorMessage, "myPortal")
+        }}
+      );
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['list-employees']);
+      });
+      
+    }
+  }
 }

@@ -1,147 +1,173 @@
 <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="display-5 text-center p-5">Creates Employee</div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="display-5 text-center p-5">
+        <span *ngIf="paramKey == 0">Create</span>
+        <span *ngIf="paramKey > 0">Edit</span>
+        Employee
       </div>
     </div>
   </div>
-  
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <!-- {{ employee.value | json }} -->
-        <form [formGroup]="employee" (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="firstName" class="form-label">First Name</label>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <form [formGroup]="employeeForm">
+        <div class="mb-3">
+          <label for="firstName" class="form-label">First Name</label>
+          <span class="text-danger">*</span>
+          <input
+          class="form-control w-50"
+          name="firstName"
+          id="firstName"
+          type="text"
+          placeholder="firstname"
+          aria-label="firstName"
+          [ngClass]="displayFieldCss('firstName', 'txt')"
+          formControlName="firstName"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="middleName" class="form-label">Middle Name</label>
+          <input
+            class="form-control w-50"
+            name="middleName"
+            id="middleName"
+            type="text"
+            placeholder="middlename"
+            aria-label="middleName"
+            formControlName="middleName"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Last Name</label>
+          <span class="text-danger">*</span>
+          <input
+            class="form-control w-50"
+            name="lastName"
+            id="lastName"
+            type="text"
+            placeholder="lastname"
+            aria-label="lastName"
+            [ngClass]="displayFieldCss('lastName', 'txt')"
+            formControlName="lastName"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="salary" class="form-label">Salary</label>
+          <span class="text-danger">*</span>
+          <input
+            class="form-control w-50"
+            name="salary"
+            id="salary"
+            type="number"
+            placeholder="salary"
+            aria-label="salary"
+            [ngClass]="displayFieldCss('salary', 'txt')"
+            formControlName="salary"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="dob" class="form-label">Date of Birth</label>
+          <span class="text-danger">*</span>
+          <input
+            class="form-control w-25"
+            name="dob"
+            id="dob"
+            type="date"
+            aria-label="Date of Birth"
+            formControlName="dob"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="gender" class="form-label me-2">Gender<span class="text-danger">*</span> : </label>
+          <label for="Male" class="form-label me-2">Male</label>
+          <input
+          class="me-3"
+          name="gender"
+          id="Male"
+          type="radio"
+          value="1"
+          aria-label="Male"
+          formControlName="gender"
+          />
+          <label for="Female" class="form-label me-2">Female</label>
+          <input
+            name="gender"
+            id="Female"
+            type="radio"
+            value="0"
+            aria-label="Female"
+            formControlName="gender"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Hobbies : </label>
+          <div *ngFor="let Hobbie of Hobbies">
             <input
-              class="form-control w-50"
-              name="firstName"
-              id="firstName"
-              type="text"
-              placeholder="enter firstname"
-              aria-label="firstName"
-              formControlName="firstName"
+              type="checkbox"
+              [checked]="Hobbie.isChecked"
+              (change)="onChangeHobbie($event, Hobbie.name)"
             />
+
+            {{ Hobbie.name }}
           </div>
-          <div class="mb-3">
-            <label for="middleName" class="form-label">Middle Name</label>
-            <input
-              class="form-control w-50"
-              name="middleName"
-              id="middleName"
-              type="text"
-              placeholder="enter middlename"
-              aria-label="middleName"
-              formControlName="middleName"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="lastName" class="form-label">Last Name</label>
-            <input
-              class="form-control w-50"
-              name="lastName"
-              id="lastName"
-              type="text"
-              placeholder="enter lastname"
-              aria-label="lastName"
-              formControlName="lastName"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="salary" class="form-label">Salary</label>
-            <input
-              class="form-control w-50"
-              name="salary"
-              id="salary"
-              type="number"
-              placeholder="enter salary"
-              aria-label="salary"
-              formControlName="salary"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="dob" class="form-label">Date of Birth</label>
-            <input
-              class="form-control w-25"
-              name="dob"
-              id="dob"
-              type="date"
-              aria-label="Date of Birth"
-              formControlName="dob"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="gender" class="form-label me-2">Gender : </label>
-            <label for="Male" class="form-label me-2">Male</label>
-            <input
-              class="me-3"
-              name="gender"
-              id="Male"
-              type="radio"
-              value="1"
-              aria-label="Male"
-              formControlName="gender"
-            />
-            <label for="Female" class="form-label me-2">Female</label>
-            <input
-              name="gender"
-              id="Female"
-              type="radio"
-              value="0"
-              aria-label="Female"
-              formControlName="gender"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="" class="form-label">Hobbies</label>
-            <div *ngFor="let Hobbie of Hobbies; index as i">
-              <input
-                type="checkbox"
-                [value]="Hobbie.name"
-                (change)="onChange($event)"
-              />
-              {{ Hobbies[i].name }}
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="Designation">Department : </label>
-            <select
-              class="form-select w-25"
-              name="department"
-              id="department"
-              formControlName="deptId"
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="Designation">Department<span class="text-danger">*</span> : </label>
+          <select
+            class="form-select w-25"
+            name="department"
+            id="department"
+            [ngClass]="displayFieldCss('deptId', 'txt')"
+            formControlName="deptId"
+          >
+            <option selected>Select</option>
+            <option
+              *ngFor="let department of Departments"
+              value="{{ department.departmentId }}"
             >
-              <option
-                *ngFor="let department of Departments"
-                value="{{ department.departmentId }}"
-              >
-                {{ department.departmentName }}
-              </option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="Designation">Designation : </label>
-            <select
-              class="form-select w-25"
-              name="designation"
-              id="designation"
-              formControlName="desgnId"
+              {{ department.departmentName }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="Designation">Designation<span class="text-danger">*</span> : </label>
+          <select
+            class="form-select w-25"
+            name="designation"
+            id="designation"
+            formControlName="desgnId"
+          >
+            <option selected>Select</option>
+            <option
+              *ngFor="let designation of Designations"
+              value="{{ designation.designationId }}"
             >
-              <option
-                *ngFor="let designation of Designations"
-                value="{{ designation.designationId }}"
-              >
-                {{ designation.designationName }}
-              </option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <span *ngIf="errorMessage != null" class="ms-3 text-danger fw-bold text-start">There might have some error</span>
-            <span *ngIf="isAdding && errorMessage == null" class="ms-3 text-start">Loading...</span>
-          </div>
-        </form>
-      </div>
+              {{ designation.designationName }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="employeeForm.invalid"
+            (click)="onSubmit()"
+          >
+            Submit
+          </button>
+          <span
+            *ngIf="errorMessage != null"
+            class="ms-3 text-danger fw-bold text-start"
+            >There might have some error</span
+          >
+          <span *ngIf="isAdding && errorMessage == null" class="ms-3 text-start"
+            >Loading...</span
+          >
+        </div>
+      </form>
     </div>
   </div>
-  
+</div>
