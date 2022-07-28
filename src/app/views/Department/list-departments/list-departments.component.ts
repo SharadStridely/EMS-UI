@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Department } from 'src/app/models/Depatment';
 import { DepartmentService } from 'src/app/services/Department/department.service';
 
 @Component({
@@ -8,14 +9,13 @@ import { DepartmentService } from 'src/app/services/Department/department.servic
 })
 export class ListDepartmentsComponent implements OnInit {
 
-  Departments: any = [];
+  Departments: any
 
   constructor(private departmentService: DepartmentService) {
-    departmentService.getAll().subscribe(departments => this.Departments = departments)
-    
    }
 
   ngOnInit(): void {
+    this.departmentService.getAll().subscribe(departments => this.Departments = departments)
   }
 
 }

@@ -89,8 +89,8 @@ export class AddEditEmployeeComponent implements OnInit {
       salary: 0,
       dob: '',
       gender: "1",
-      deptId: 'Select',
-      desgnId: 'Select'
+      deptId: 0,
+      desgnId: 0
     })
   }
   
@@ -125,41 +125,64 @@ export class AddEditEmployeeComponent implements OnInit {
     {
       this.Employee.hobbies = this.Employee.hobbies.slice(0, -1);
     }
-    this.displayToastrError();
   }
 
   onSubmit() {
-    this.setModelBeforeSubmit();
-    if (this.paramKey == 0) {
-      this.isAdding = true;
-      this.employeeService.addEmployee(this.Employee).subscribe({
-        complete:() => {
-        this.router.navigateByUrl("list-employees");
-        this.notifyService.showSuccess("Employee Added successfully !!", "myPortal");
-      }, 
-        error:(err) => {
-        this.isAdding = false;
-        this.errorMessage = err.message;
+    if (this.employeeForm.invalid) {
+      this.Employee == this.employeeForm.value;
+      if (this.employeeForm.value.firstName.trim() === '') {
+        this.notifyService.showError('Please fill the FirstName field', 'Validation Alert!');
+       }
+       else if (this.employeeForm.value.lastName.trim() === '') {
+        this.notifyService.showError('Please fill the LastName field', 'Validation Alert!');
+       }
+       else if (this.employeeForm.value.salary == null) {
+        this.notifyService.showError('Please fill the Salary field', 'Validation Alert!');
+       }
+       else if (this.employeeForm.value.deptId == 'Select') {
+        this.notifyService.showError('Please select the Department', 'Validation Alert!');
+       }
+       else if (this.employeeForm.value.desgnId == 'Select') {
+        this.notifyService.showError('Please select the Designation', 'Validation Alert!');
+       }
+       else{
+        this.setModelBeforeSubmit();
+        if (this.paramKey == 0) {
+          this.isAdding = true;
+          this.employeeService.addEmployee(this.Employee).subscribe({
+            complete:() => {
+            this.router.navigateByUrl("list-employees");
+            this.notifyService.showSuccess("Employee Added successfully !!", "myPortal");
+          }, 
+            error:(err) => {
+            this.isAdding = false;
+            this.errorMessage = err.message;
+            }
+          });
         }
-      });
-    }
-    else if(this.paramKey > 0){
-      this.isUpdating = true;
-      this.employeeService.updateEmployee(this.Employee.employeeId ,this.Employee).subscribe({
-        complete:() => {
-        this.router.navigateByUrl("list-employees");
-        this.notifyService.showSuccess("Employee updated successfully !!", "myPortal");
-      },
-        error:(err) => {
-        // this.isUpdating = false;
-        this.errorMessage = err.message;
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate(['employee/0']);
-        });
-        this.notifyService.showError(this.errorMessage, "myPortal");
+        else if(this.paramKey > 0){
+          this.isUpdating = true;
+          this.employeeService.updateEmployee(this.Employee.employeeId ,this.Employee).subscribe({
+            complete:() => {
+            this.router.navigateByUrl("list-employees");
+            this.notifyService.showSuccess("Employee updated successfully !!", "myPortal");
+          },
+            error:(err) => {
+            // this.isUpdating = false;
+            this.errorMessage = err.message;
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['employee/0']);
+            });
+            this.notifyService.showError(this.errorMessage, "myPortal");
+            }
+          });
         }
-      });
+       }
     }
+    else{
+      this.notifyService.showError('Please fill required fields', 'Validation Alert!');
+    }
+
   }
   
   onChangeHobbie(event: any, hobbieName: string){
@@ -186,22 +209,22 @@ export class AddEditEmployeeComponent implements OnInit {
     } 
   }
 
-  displayToastrError(){
-     if (this.employeeForm.value.firstName.trim() === '') {
-      this.notifyService.showError('Please fill the FirstName field', 'Validation Alert!');
-     }
-     else if (this.employeeForm.value.lastName.trim() === '') {
-      this.notifyService.showError('Please fill the LastName field', 'Validation Alert!');
-     }
-     else if (this.employeeForm.value.salary == null || this.employeeForm.value.salary == '0') {
-      this.notifyService.showError('Please fill the Salary field', 'Validation Alert!');
-     }
-     else if (this.employeeForm.value.deptId == 'Select') {
-      this.notifyService.showError('Please select the Department', 'Validation Alert!');
-     }
-     else if (this.employeeForm.value.desgnId == 'Select') {
-      this.notifyService.showError('Please select the Designation', 'Validation Alert!');
-     }
-  }
+  // displayToastrError(){
+  //    if (this.employeeForm.value.firstName.trim() === '') {
+  //     this.notifyService.showError('Please fill the FirstName field', 'Validation Alert!');
+  //    }
+  //    else if (this.employeeForm.value.lastName.trim() === '') {
+  //     this.notifyService.showError('Please fill the LastName field', 'Validation Alert!');
+  //    }
+  //    else if (this.employeeForm.value.salary == null || this.employeeForm.value.salary == '0') {
+  //     this.notifyService.showError('Please fill the Salary field', 'Validation Alert!');
+  //    }
+  //    else if (this.employeeForm.value.deptId == 'Select') {
+  //     this.notifyService.showError('Please select the Department', 'Validation Alert!');
+  //    }
+  //    else if (this.employeeForm.value.desgnId == 'Select') {
+  //     this.notifyService.showError('Please select the Designation', 'Validation Alert!');
+  //    }
+  // }
 
 }

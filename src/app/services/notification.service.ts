@@ -12,6 +12,7 @@ export class NotificationService {
     this.toastr.success(message, title, {
       timeOut: 5000,
       closeButton: true,
+      extendedTimeOut: 2000,
       positionClass: "toast-top-right"
     })
   }
@@ -20,6 +21,7 @@ export class NotificationService {
     this.toastr.error(message, title, {
       timeOut: 5000,
       closeButton: true,
+      extendedTimeOut: 2000,
       positionClass: "toast-top-right"
     
     })

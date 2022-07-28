@@ -123,7 +123,7 @@
             [ngClass]="displayFieldCss('deptId', 'txt')"
             formControlName="deptId"
           >
-            <option selected>Select</option>
+            <option value="0">Select</option>
             <option
               *ngFor="let department of Departments"
               value="{{ department.departmentId }}"
@@ -140,7 +140,7 @@
             id="designation"
             formControlName="desgnId"
           >
-            <option selected>Select</option>
+            <option value="0">Select</option>
             <option
               *ngFor="let designation of Designations"
               value="{{ designation.designationId }}"
