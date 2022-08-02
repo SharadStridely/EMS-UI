@@ -77,6 +77,7 @@
             id="dob"
             type="date"
             aria-label="Date of Birth"
+            max="{{ displayMaxDate }}"
             formControlName="dob"
           />
         </div>
@@ -120,8 +121,8 @@
             class="form-select w-25"
             name="department"
             id="department"
-            [ngClass]="displayFieldCss('deptId', 'txt')"
-            formControlName="deptId"
+            [ngClass]="displayFieldCss('department', 'txt')"
+            formControlName="department"
           >
             <option value="0">Select</option>
             <option
@@ -138,7 +139,8 @@
             class="form-select w-25"
             name="designation"
             id="designation"
-            formControlName="desgnId"
+            [ngClass]="displayFieldCss('designation', 'txt')"
+            formControlName="designation"
           >
             <option value="0">Select</option>
             <option

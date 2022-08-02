@@ -11,6 +11,10 @@ export class DepartmentService {
 
   departmentURL: string = environment.DepartmentURL;
 
+  addDepartment(department: any){
+    this.http.post(this.departmentURL, department);
+  }
+
   getAll(){
     return this.http.get(this.departmentURL);
   }

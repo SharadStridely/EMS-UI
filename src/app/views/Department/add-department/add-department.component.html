@@ -1,1 +1,40 @@
-<p>add-department works!</p>
+<div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="display-5 text-center p-5">
+          Create Department
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+<div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <form [formGroup]="departmentForm">
+          <div class="mb-3">
+            <label for="departmentName" class="form-label">Department Name</label>
+            <span class="text-danger">*</span>
+            <input
+            class="form-control w-50"
+            name="departmentName"
+            id="departmentName"
+            type="text"
+            placeholder="departmentName"
+            aria-label="departmentName"
+            [ngClass]="displayFieldCss('departmentName', 'txt')"
+            formControlName="departmentName"
+            />
+          </div>
+          <div class="mb-3">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              (click)="onSubmit()"
+            >
+              Submit
+            </button>
+            
+          </div>
