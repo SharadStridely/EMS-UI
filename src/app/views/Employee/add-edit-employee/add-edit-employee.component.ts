@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CustomValidator } from 'src/app/core/custom-validator';
 import { Employee } from 'src/app/models/Employee';
 import { DepartmentService } from 'src/app/services/Department/department.service';
 import { DesignationService } from 'src/app/services/Designation/designation.service';
@@ -44,21 +45,17 @@ export class AddEditEmployeeComponent implements OnInit {
     private designationService: DesignationService,
     private router: Router,
     public datePipe: DatePipe,
-    private activatdRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private notifyService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.setFormBuilder();
-    this.displayMaxDate =
-      this.maxDate.getFullYear() -
-      18 +
-      '-' +
-      this.maxDate.toISOString().slice(5, 10);
-    this.activatdRoute.paramMap.subscribe(
+    this.displayMaxDate = this.maxDate.getFullYear() - 18 + '-' + this.maxDate.toISOString().slice(5, 10);    
+    this.activatedRoute.paramMap.subscribe(
       (res) => (this.paramKey = +res.get('id'))
     );
-    // this.paramKey = +this.activatdRoute.snapshot.params['id'];
+    // this.paramKey = +this.activatedRoute.snapshot.params['id'];
     this.departmentService
       .getAll()
       .subscribe((departments) => (this.Departments = departments));
@@ -75,7 +72,6 @@ export class AddEditEmployeeComponent implements OnInit {
             if (this.Employee.hobbies.includes(hobbie.name))
               hobbie.isChecked = true;
           });
-          console.log(this.Hobbies);
           this.setEditForm();
         },
         error: (err) => {
@@ -106,8 +102,15 @@ export class AddEditEmployeeComponent implements OnInit {
           Validators.pattern(/^[A-Za-z0-9 ]+$/),
         ],
       ],
-      salary: ['', [Validators.min(1), Validators.max(10000000), Validators.pattern(/^\d*\.?\d*$/)]],
-      dob: ['', Validators.required],
+      salary: [
+        '',
+        [
+          Validators.min(1),
+          Validators.max(10000000),
+          Validators.pattern(/^\d*\.?\d*$/),
+        ],
+      ],
+      dob: ['', [Validators.required, CustomValidator.dateValidator]],
       gender: ['', [Validators.required]],
       department: ['', [Validators.min(1)]],
       designation: ['', [Validators.min(1)]],
@@ -142,14 +145,14 @@ export class AddEditEmployeeComponent implements OnInit {
 
   setModelBeforeSubmit() {
     (this.Employee.firstName = this.employeeForm.value.firstName),
-      (this.Employee.middleName = this.employeeForm.value.middleName),
-      (this.Employee.lastName = this.employeeForm.value.lastName),
-      (this.Employee.salary = +this.employeeForm.value.salary),
-      (this.Employee.dob = this.employeeForm.value.dob),
-      (this.Employee.gender = +this.employeeForm.value.gender),
-      (this.Employee.deptId = +this.employeeForm.value.department),
-      (this.Employee.desgnId = +this.employeeForm.value.designation),
-      (this.Employee.hobbies = '');
+    (this.Employee.middleName = this.employeeForm.value.middleName),
+    (this.Employee.lastName = this.employeeForm.value.lastName),
+    (this.Employee.salary = +this.employeeForm.value.salary),
+    (this.Employee.dob = this.employeeForm.value.dob),
+    (this.Employee.gender = +this.employeeForm.value.gender),
+    (this.Employee.deptId = +this.employeeForm.value.department),
+    (this.Employee.desgnId = +this.employeeForm.value.designation),
+    (this.Employee.hobbies = '');
     this.Hobbies.filter((hobbie) => hobbie.isChecked == true).forEach(
       (hobbie) => {
         this.Employee.hobbies += hobbie.name + ',';
@@ -164,6 +167,8 @@ export class AddEditEmployeeComponent implements OnInit {
     if (this.employeeForm.invalid) {
       this.Employee == this.employeeForm.value;
       this.displayToastrError();
+    } else if(this.employeeForm.value.dob > this.displayMaxDate){
+      this.notifyService.showError("Please select valid Date", 'Validation Alert!')
     } else {
       this.setModelBeforeSubmit();
       if (this.paramKey == 0) {
@@ -233,24 +238,43 @@ export class AddEditEmployeeComponent implements OnInit {
     }
   }
 
+  // displayDOBCss(field: string){
+  //   return{
+  //     'plain-valid' : this.employeeForm.get(field).value <= this.displayMaxDate,
+  //     'is-invalid': this.employeeForm.get(field).value > this.displayMaxDate
+  //   }
+  // }
+
   displayToastrError() {
-    const specialChars =  /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-    if (this.employeeForm.get('firstName').invalid && this.employeeForm.value.firstName.trim() == '') {
+    const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    if (
+      this.employeeForm.get('firstName').invalid &&
+      this.employeeForm.value.firstName.trim() == ''
+    ) {
       this.notifyService.showError(
         'Please fill the FirstName field',
         'Validation Alert!'
       );
-    } else if (this.employeeForm.get('firstName').invalid && this.employeeForm.value.firstName.match(specialChars)) {
+    } else if (
+      this.employeeForm.get('firstName').invalid &&
+      this.employeeForm.value.firstName.match(specialChars)
+    ) {
       this.notifyService.showError(
         "FirstName doesn't contain special character",
         'Validation Alert!'
       );
-    } else if (this.employeeForm.get('lastName').invalid && this.employeeForm.value.lastName.trim() == '') {
+    } else if (
+      this.employeeForm.get('lastName').invalid &&
+      this.employeeForm.value.lastName.trim() == ''
+    ) {
       this.notifyService.showError(
         'Please fill the LastName field',
         'Validation Alert!'
       );
-    } else if (this.employeeForm.get('lastName').invalid && this.employeeForm.value.lastName.match(specialChars)) {
+    } else if (
+      this.employeeForm.get('lastName').invalid &&
+      this.employeeForm.value.lastName.match(specialChars)
+    ) {
       this.notifyService.showError(
         "LastName doesn't contain special character",
         'Validation Alert!'
@@ -260,17 +284,26 @@ export class AddEditEmployeeComponent implements OnInit {
         'Please fill the Salary field',
         'Validation Alert!'
       );
-    } else if (this.employeeForm.get('dob').invalid && this.employeeForm.value.dob.trim() == '') {
+    } else if (
+      this.employeeForm.get('dob').invalid &&
+      this.employeeForm.value.dob.trim() == ''
+    ) {
       this.notifyService.showError(
-        'Please fill the Date field',
+        'Please select the Date field',
         'Validation Alert!'
       );
-    } else if (this.employeeForm.get('department').invalid && this.employeeForm.value.department == 0) {
+    } else if (
+      this.employeeForm.get('department').invalid &&
+      this.employeeForm.value.department == 0
+    ) {
       this.notifyService.showError(
         'Please select the Department',
         'Validation Alert!'
       );
-    } else if (this.employeeForm.get('designation').invalid && this.employeeForm.value.designation == 0) {
+    } else if (
+      this.employeeForm.get('designation').invalid &&
+      this.employeeForm.value.designation == 0
+    ) {
       this.notifyService.showError(
         'Please select the Designation',
         'Validation Alert!'

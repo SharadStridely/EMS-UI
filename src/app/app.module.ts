@@ -16,7 +16,6 @@ import { AddDesignationComponent } from './views/Designation/add-designation/add
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { DatePipe } from '@angular/common';
 import { AddEditEmployeeComponent } from './views/Employee/add-edit-employee/add-edit-employee.component';
-import { CustomValidatorsDirective } from './directives/custom-validators.directive';
 
 @NgModule({
   declarations: [
@@ -28,8 +27,7 @@ import { CustomValidatorsDirective } from './directives/custom-validators.direct
     AddDepartmentComponent,
     AddDesignationComponent,
     NotFoundComponent,
-    AddEditEmployeeComponent,
-    CustomValidatorsDirective
+    AddEditEmployeeComponent
   ],
   imports: [
     BrowserModule,
