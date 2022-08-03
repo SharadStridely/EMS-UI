@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomValidator } from 'src/app/core/custom-validator';
+import { Emsconst } from 'src/app/core/emsconst';
 import { Employee } from 'src/app/models/Employee';
 import { DepartmentService } from 'src/app/services/Department/department.service';
 import { DesignationService } from 'src/app/services/Designation/designation.service';
@@ -51,7 +52,11 @@ export class AddEditEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.setFormBuilder();
-    this.displayMaxDate = this.maxDate.getFullYear() - 18 + '-' + this.maxDate.toISOString().slice(5, 10);    
+    this.displayMaxDate =
+      this.maxDate.getFullYear() -
+      18 +
+      '-' +
+      this.maxDate.toISOString().slice(5, 10);
     this.activatedRoute.paramMap.subscribe(
       (res) => (this.paramKey = +res.get('id'))
     );
@@ -145,14 +150,14 @@ export class AddEditEmployeeComponent implements OnInit {
 
   setModelBeforeSubmit() {
     (this.Employee.firstName = this.employeeForm.value.firstName),
-    (this.Employee.middleName = this.employeeForm.value.middleName),
-    (this.Employee.lastName = this.employeeForm.value.lastName),
-    (this.Employee.salary = +this.employeeForm.value.salary),
-    (this.Employee.dob = this.employeeForm.value.dob),
-    (this.Employee.gender = +this.employeeForm.value.gender),
-    (this.Employee.deptId = +this.employeeForm.value.department),
-    (this.Employee.desgnId = +this.employeeForm.value.designation),
-    (this.Employee.hobbies = '');
+      (this.Employee.middleName = this.employeeForm.value.middleName),
+      (this.Employee.lastName = this.employeeForm.value.lastName),
+      (this.Employee.salary = +this.employeeForm.value.salary),
+      (this.Employee.dob = this.employeeForm.value.dob),
+      (this.Employee.gender = +this.employeeForm.value.gender),
+      (this.Employee.deptId = +this.employeeForm.value.department),
+      (this.Employee.desgnId = +this.employeeForm.value.designation),
+      (this.Employee.hobbies = '');
     this.Hobbies.filter((hobbie) => hobbie.isChecked == true).forEach(
       (hobbie) => {
         this.Employee.hobbies += hobbie.name + ',';
@@ -167,8 +172,11 @@ export class AddEditEmployeeComponent implements OnInit {
     if (this.employeeForm.invalid) {
       this.Employee == this.employeeForm.value;
       this.displayToastrError();
-    } else if(this.employeeForm.value.dob > this.displayMaxDate){
-      this.notifyService.showError("Please select valid Date", 'Validation Alert!')
+    } else if (this.employeeForm.value.dob > this.displayMaxDate) {
+      this.notifyService.showError(
+        'Please select valid Date',
+        Emsconst.validationTitile
+      );
     } else {
       this.setModelBeforeSubmit();
       if (this.paramKey == 0) {
@@ -178,13 +186,13 @@ export class AddEditEmployeeComponent implements OnInit {
             this.router.navigateByUrl('list-employees');
             this.notifyService.showSuccess(
               'Employee Added successfully !!',
-              'myPortal'
+              Emsconst.successTitile
             );
           },
           error: (err) => {
             this.isAdding = false;
             this.errorMessage = err.message;
-            this.notifyService.showError(this.errorMessage, 'myPortal');
+            this.notifyService.showError(this.errorMessage, Emsconst.successTitile);
           },
         });
       } else if (this.paramKey > 0) {
@@ -196,13 +204,13 @@ export class AddEditEmployeeComponent implements OnInit {
               this.router.navigateByUrl('list-employees');
               this.notifyService.showSuccess(
                 'Employee updated successfully !!',
-                'myPortal'
+                Emsconst.successTitile
               );
             },
             error: (err) => {
               // this.isUpdating = false;
               this.errorMessage = err.message;
-              this.notifyService.showError(this.errorMessage, 'myPortal');
+              this.notifyService.showError(this.errorMessage, Emsconst.successTitile);
             },
           });
       }
@@ -238,13 +246,6 @@ export class AddEditEmployeeComponent implements OnInit {
     }
   }
 
-  // displayDOBCss(field: string){
-  //   return{
-  //     'plain-valid' : this.employeeForm.get(field).value <= this.displayMaxDate,
-  //     'is-invalid': this.employeeForm.get(field).value > this.displayMaxDate
-  //   }
-  // }
-
   displayToastrError() {
     const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if (
@@ -253,7 +254,7 @@ export class AddEditEmployeeComponent implements OnInit {
     ) {
       this.notifyService.showError(
         'Please fill the FirstName field',
-        'Validation Alert!'
+        Emsconst.validationTitile
       );
     } else if (
       this.employeeForm.get('firstName').invalid &&
@@ -261,7 +262,7 @@ export class AddEditEmployeeComponent implements OnInit {
     ) {
       this.notifyService.showError(
         "FirstName doesn't contain special character",
-        'Validation Alert!'
+        Emsconst.validationTitile
       );
     } else if (
       this.employeeForm.get('lastName').invalid &&
@@ -269,7 +270,7 @@ export class AddEditEmployeeComponent implements OnInit {
     ) {
       this.notifyService.showError(
         'Please fill the LastName field',
-        'Validation Alert!'
+        Emsconst.validationTitile
       );
     } else if (
       this.employeeForm.get('lastName').invalid &&
@@ -277,12 +278,12 @@ export class AddEditEmployeeComponent implements OnInit {
     ) {
       this.notifyService.showError(
         "LastName doesn't contain special character",
-        'Validation Alert!'
+        Emsconst.validationTitile
       );
     } else if (this.employeeForm.get('salary').invalid) {
       this.notifyService.showError(
         'Please fill the Salary field',
-        'Validation Alert!'
+        Emsconst.validationTitile
       );
     } else if (
       this.employeeForm.get('dob').invalid &&
@@ -290,7 +291,15 @@ export class AddEditEmployeeComponent implements OnInit {
     ) {
       this.notifyService.showError(
         'Please select the Date field',
-        'Validation Alert!'
+        Emsconst.validationTitile
+      );
+    } else if (
+      this.employeeForm.get('dob').invalid &&
+      this.employeeForm.value.dob > this.displayMaxDate
+    ) {
+      this.notifyService.showError(
+        'Date of birth should be less then ' + this.displayMaxDate.split("-").reverse().join("-"),
+        Emsconst.validationTitile
       );
     } else if (
       this.employeeForm.get('department').invalid &&
@@ -298,7 +307,7 @@ export class AddEditEmployeeComponent implements OnInit {
     ) {
       this.notifyService.showError(
         'Please select the Department',
-        'Validation Alert!'
+        Emsconst.validationTitile
       );
     } else if (
       this.employeeForm.get('designation').invalid &&
@@ -306,15 +315,23 @@ export class AddEditEmployeeComponent implements OnInit {
     ) {
       this.notifyService.showError(
         'Please select the Designation',
-        'Validation Alert!'
+        Emsconst.validationTitile
       );
     }
   }
 
+  //validation of Date
+  // displayDOBCss(field: string){
+  //   return{
+  //     'plain-valid' : this.employeeForm.get(field).value <= this.displayMaxDate,
+  //     'is-invalid': this.employeeForm.get(field).value > this.displayMaxDate
+  //   }
+  // }
+
   // displayToastrError(ctrl: any) {
   //    for (let key in ctrl) {
   //     if (this.employeeForm.get(key).invalid) {
-  //       this.notifyService.showError('Please fill the ' + key.toLowerCase() + ' field', 'Validation Alert!');
+  //       this.notifyService.showError('Please fill the ' + key.toLowerCase() + ' field', Emsconst.validationTitile);
   //       return
   //     }
   //   }
