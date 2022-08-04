@@ -112,7 +112,6 @@
               [checked]="Hobbie.isChecked"
               (change)="onChangeHobbie($event, Hobbie.name)"
             />
-
             {{ Hobbie.name }}
           </div>
         </div>
@@ -128,7 +127,7 @@
             <option value="0">Select</option>
             <option
               *ngFor="let department of Departments"
-              value="{{ department.departmentId }}"
+              [value]="department.departmentId"
             >
               {{ department.departmentName }}
             </option>
@@ -146,7 +145,7 @@
             <option value="0">Select</option>
             <option
               *ngFor="let designation of Designations"
-              value="{{ designation.designationId }}"
+              [value]="designation.designationId"
             >
               {{ designation.designationName }}
             </option>

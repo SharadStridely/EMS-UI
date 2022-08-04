@@ -36,6 +36,9 @@ export class AddEditEmployeeComponent implements OnInit {
     { id: 1, name: 'Chess', isChecked: false },
     { id: 2, name: 'Cricket', isChecked: false },
     { id: 3, name: 'Reading', isChecked: false },
+    { id: 4, name: 'Flying', isChecked: false },
+    { id: 5, name: 'Reels', isChecked: false },
+    { id: 6, name: 'Maths', isChecked: false },
   ];
   //#endregion
 

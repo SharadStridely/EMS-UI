@@ -16,6 +16,7 @@ import { AddDesignationComponent } from './views/Designation/add-designation/add
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { DatePipe } from '@angular/common';
 import { AddEditEmployeeComponent } from './views/Employee/add-edit-employee/add-edit-employee.component';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { AddEditEmployeeComponent } from './views/Employee/add-edit-employee/add
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    DataTablesModule,
     ToastrModule.forRoot()
   ],
   providers: [DatePipe],

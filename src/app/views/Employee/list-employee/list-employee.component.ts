@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { Emsconst } from 'src/app/core/emsconst';
 import { EditEmployeeService } from 'src/app/services/Employee/edit-employee.service';
 import { EmployeeService } from 'src/app/services/Employee/employee.service';
 import { NotificationService } from 'src/app/services/notification.service';
+declare const $: any;
 
 @Component({
   selector: 'app-list-employee',
@@ -16,6 +18,8 @@ export class ListEmployeeComponent implements OnInit {
   isFetching: boolean;
   isDeleting: boolean;
   errorMessage: any = null;
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject();
   //#endregion
 
   constructor(
@@ -25,11 +29,19 @@ export class ListEmployeeComponent implements OnInit {
     private notifyService : NotificationService
   ) { }
 
+
   ngOnInit(): void {
+    this.dtOptions = {
+      pagingType : 'full_numbers',
+      pageLength : 5,
+      lengthMenu : [5,10,15],
+      processing : true
+    };
     this.employeeService.getEmployeeList().subscribe({
       next:(res) => {
         this.isFetching = true;
         this.Employees = res;
+        this.dtTrigger.next(this.Employees);
       },
       error:(err) => {
         this.errorMessage = err.message;
@@ -37,6 +49,8 @@ export class ListEmployeeComponent implements OnInit {
         this.notifyService.showError(this.errorMessage, Emsconst.validationTitile);
       }
     });
+  //  $('empList').DataTables();
+ 
   }
 
   onDelete(id: any) {
